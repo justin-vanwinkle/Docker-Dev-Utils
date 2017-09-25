@@ -1,0 +1,15 @@
+FROM justinvanwinkle/dev-base:latest
+LABEL maintainer "vanwinkle.justin@gmail.com"
+
+# Utils that I might want along the way
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        chromium \
+        git \
+        unzip \
+        xterm \
+        htop \
+        sudo \
+        vim && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*

@@ -1,6 +1,18 @@
 FROM justinvanwinkle/dev-base:latest
 LABEL maintainer "vanwinkle.justin@gmail.com"
 
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gnupg2
+
+# Spotify
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys BBEBDCB318AD50EC6865090613B00F1FD2C19886 0DF731E45CE24F27EEEB1450EFDC8610341D9410 && \
+    echo deb http://repository.spotify.com stable non-free | tee /etc/apt/sources.list.d/spotify.list
+
+# Yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list &&\
+    apt-get update && apt-get install yarn
+ 
 # Utils that I might want along the way
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -9,18 +21,18 @@ RUN apt-get update && \
         unzip \
         xterm \
         htop \
-        npm
-        
+        npm \
+	spotify-client \
         sudo \
-        vim && \
+        vim \
+	yarn && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
    
-RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - && \
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && \
     apt-get install -y nodejs
     
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - && \
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list &&\
-    apt-get update && apt-get install yarn
-    
+   
 RUN npm install --global vue-cli
+
+
